@@ -4,13 +4,14 @@ import javax.annotation.PostConstruct;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.georgebarker.lockmanager.config.PropertyConfig;
+import dev.georgebarker.lockmanager.service.MqttClientService;
+import dev.georgebarker.lockmanager.service.SensorEventService;
 
 @Service
 public class SensorEventListener extends BaseMqttListener {
@@ -20,40 +21,32 @@ public class SensorEventListener extends BaseMqttListener {
     @Autowired
     PropertyConfig propertyConfig;
 
+    @Autowired
+    SensorEventService sensorEventService;
+
+    @Autowired
+    MqttClientService mqttClientService;
+
     @PostConstruct
     public void subscribeToTopic() throws MqttException {
-	LOG.info("Attempting to subscribe to topic: {} using Broker URL: {} and User ID: {}...", getTopicName(),
-		getBrokerUrl(), getUserId());
-	final MqttClient client;
+	final String topicName = getTopicName();
+	LOG.info("Attempting to subscribe to topic: {}...", topicName);
 	try {
-	    client = new MqttClient(getBrokerUrl(), getUserId());
-	    client.setCallback(this);
-	    client.connect();
-	    client.subscribe(getTopicName());
-	    LOG.info("Subscribed to topic {}, listening for messages...", getTopicName());
+	    mqttClientService.subscribeToTopic(this, topicName);
+	    LOG.info("Subscribed to topic {}, listening for messages...", topicName);
 	} catch (final MqttException e) {
-	    LOG.error(
-		    "Client could not be created to connect to topic: {} using Broker URL: {} and User ID: {}, quitting application.",
-		    getTopicName(), getBrokerUrl(), getUserId());
-	    throw e;
+	    LOG.error("Failed to subscribe to topic {}.", topicName);
 	}
     }
 
     @Override
     public void messageArrived(final String topic, final MqttMessage message) throws Exception {
-	LOG.info("Received {} on topic {}", message, topic);
-    }
-
-    private String getBrokerUrl() {
-	return propertyConfig.getBrokerUrl();
-    }
-
-    private String getUserId() {
-	return propertyConfig.getUserId();
+	LOG.info("Received {} on topic {}, processing sensor event message", message, topic);
+	sensorEventService.processSensorEventMessage(message);
     }
 
     private String getTopicName() {
-	return propertyConfig.getTopicName();
+	return propertyConfig.getSensorClientTopicName();
     }
 
 }

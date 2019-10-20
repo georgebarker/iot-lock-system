@@ -12,8 +12,11 @@ public class PropertyConfigImpl implements PropertyConfig {
     @Value("${lockmanager.user-id}")
     private String userId;
 
-    @Value("${lockmanager.topic-name}")
-    private String topicName;
+    @Value("${lockmanager.sensor-client-topic-name}")
+    private String sensorClientTopicName;
+
+    @Value("${lockmanager.lock-client-topic-name}")
+    private String lockClientTopicName;
 
     @Override
     public String getBrokerUrl() {
@@ -26,7 +29,12 @@ public class PropertyConfigImpl implements PropertyConfig {
     }
 
     @Override
-    public String getTopicName() {
-	return topicName;
+    public String getSensorClientTopicName() {
+	return sensorClientTopicName;
+    }
+
+    @Override
+    public String getLockClientTopicName() {
+	return lockClientTopicName;
     }
 }

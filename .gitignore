@@ -128,3 +128,6 @@ Temporary Items
 
 # To keep the assignment brief out of the repository
 .pdf
+
+# Ignore the generated MQTT directories
+15117733*

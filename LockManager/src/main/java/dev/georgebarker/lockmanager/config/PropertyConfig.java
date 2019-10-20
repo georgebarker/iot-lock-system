@@ -6,6 +6,8 @@ public interface PropertyConfig {
 
     String getUserId();
 
-    String getTopicName();
+    String getSensorClientTopicName();
+
+    String getLockClientTopicName();
 
 }

@@ -1,4 +1,4 @@
-package dev.georgebarker.sensorclient.publisher;
+package dev.georgebarker.lockmanager.publisher;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
-import dev.georgebarker.sensorclient.config.PropertyConfig;
-import dev.georgebarker.sensorclient.model.SensorEvent;
-import dev.georgebarker.sensorclient.service.MqttClientService;
+import dev.georgebarker.lockmanager.config.PropertyConfig;
+import dev.georgebarker.lockmanager.model.SensorEvent;
+import dev.georgebarker.lockmanager.service.MqttClientService;
 
 @Service
 public class SensorEventPublisherImpl implements SensorEventPublisher {
@@ -39,10 +39,8 @@ public class SensorEventPublisherImpl implements SensorEventPublisher {
 		    sensorEventJson);
 	    return;
 	}
-
 	LOG.info("Successfully published on topic: {} Sensor Event: {} using JSON: {}.", topicName, sensorEvent,
 		sensorEventJson);
-
     }
 
     private String convertSensorEventToJson(final SensorEvent sensorEvent) {
@@ -50,7 +48,7 @@ public class SensorEventPublisherImpl implements SensorEventPublisher {
     }
 
     private String getTopicName() {
-	return propertyConfig.getTopicName();
+	return propertyConfig.getLockClientTopicName();
     }
 
 }
