@@ -1,4 +1,4 @@
-package dev.georgebarker.lockmanager.listener;
+package dev.georgebarker.lockclient.listener;
 
 import javax.annotation.PostConstruct;
 
@@ -9,9 +9,9 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dev.georgebarker.lockmanager.config.PropertyConfig;
-import dev.georgebarker.lockmanager.service.MqttClientService;
-import dev.georgebarker.lockmanager.service.SensorEventService;
+import dev.georgebarker.lockclient.config.PropertyConfig;
+import dev.georgebarker.lockclient.service.MqttClientService;
+import dev.georgebarker.lockclient.service.SensorEventService;
 
 @Service
 public class SensorEventListenerImpl extends BaseMqttListener implements SensorEventListener {
@@ -22,10 +22,10 @@ public class SensorEventListenerImpl extends BaseMqttListener implements SensorE
     private PropertyConfig propertyConfig;
 
     @Autowired
-    SensorEventService sensorEventService;
+    private SensorEventService sensorEventService;
 
     @Autowired
-    MqttClientService mqttClientService;
+    private MqttClientService mqttClientService;
 
     @Override
     @PostConstruct
@@ -47,7 +47,7 @@ public class SensorEventListenerImpl extends BaseMqttListener implements SensorE
     }
 
     private String getTopicName() {
-	return propertyConfig.getSensorClientTopicName();
+	return propertyConfig.getLockClientTopicName();
     }
 
 }

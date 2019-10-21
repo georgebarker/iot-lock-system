@@ -14,8 +14,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.georgebarker.lockmanager.model.SensorEvent;
-import dev.georgebarker.lockmanager.model.TagSensorCombination;
-import dev.georgebarker.lockmanager.model.TagSensorCombinationId;
+import dev.georgebarker.lockmanager.model.TagSensorLockCombination;
+import dev.georgebarker.lockmanager.model.TagSensorLockCombinationId;
 import dev.georgebarker.lockmanager.publisher.SensorEventPublisher;
 import dev.georgebarker.lockmanager.repository.SensorEventRepository;
 import dev.georgebarker.lockmanager.repository.TagSensorCombinationRepository;
@@ -54,22 +54,22 @@ public class SensorEventServiceImplTest {
 	givenIHaveAMessageWithAnInvalidCombination();
 	whenIProcessTheMessage();
 	thenAnUnsuccessfulEventIsRecorded();
-	thenTheEventIsNotPublished();
+	thenTheEventIsPublished();
     }
 
     private void givenIHaveAMessageWithAnInvalidCombination() {
 	message = new MqttMessage();
 	message.setPayload(INVALID_MESSAGE_JSON.getBytes());
-	final TagSensorCombination tagSensorCombination = createTagSensorCombination("invalid-tag", 999);
-	Mockito.when(tagSensorCombinationRepository.findById(tagSensorCombination.getTagSensorCombinationId()))
+	final TagSensorLockCombination tagSensorCombination = createTagSensorCombination("invalid-tag", 999);
+	Mockito.when(tagSensorCombinationRepository.findById(tagSensorCombination.getTagSensorLockCombinationId()))
 		.thenReturn(Optional.empty());
     }
 
     private void givenIHaveAMessageWithAValidCombination() {
 	message = new MqttMessage();
 	message.setPayload(VALID_MESSAGE_JSON.getBytes());
-	final TagSensorCombination tagSensorCombination = createTagSensorCombination("valid-tag", 388496);
-	Mockito.when(tagSensorCombinationRepository.findById(tagSensorCombination.getTagSensorCombinationId()))
+	final TagSensorLockCombination tagSensorCombination = createTagSensorCombination("valid-tag", 388496);
+	Mockito.when(tagSensorCombinationRepository.findById(tagSensorCombination.getTagSensorLockCombinationId()))
 		.thenReturn(Optional.of(tagSensorCombination));
     }
 
@@ -97,14 +97,10 @@ public class SensorEventServiceImplTest {
 	Mockito.verify(sensorEventPublisher).publish(sensorEvent);
     }
 
-    private void thenTheEventIsNotPublished() {
-	Mockito.verify(sensorEventPublisher, Mockito.never()).publish(Mockito.any());
-    }
-
-    private TagSensorCombination createTagSensorCombination(final String tagId, final int sensorSerialNumber) {
-	final TagSensorCombinationId id = new TagSensorCombinationId(tagId, sensorSerialNumber);
-	final TagSensorCombination tagSensorCombination = new TagSensorCombination();
-	tagSensorCombination.setTagSensorCombinationId(id);
+    private TagSensorLockCombination createTagSensorCombination(final String tagId, final int sensorSerialNumber) {
+	final TagSensorLockCombinationId id = new TagSensorLockCombinationId(tagId, sensorSerialNumber);
+	final TagSensorLockCombination tagSensorCombination = new TagSensorLockCombination();
+	tagSensorCombination.setTagSensorLockCombinationId(id);
 	tagSensorCombination.setDisabled(false);
 
 	return tagSensorCombination;

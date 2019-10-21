@@ -1,14 +1,7 @@
-package dev.georgebarker.lockmanager.model;
+package dev.georgebarker.lockclient.model;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "sensor_event")
 public class SensorEvent {
 
     private int SensorEventId;
@@ -18,20 +11,6 @@ public class SensorEvent {
     private Timestamp timestamp;
     private boolean successful;
 
-    public SensorEvent() {
-	// Default constructor
-    }
-
-    public SensorEvent(final String tagId, final int sensorSerialNumber, final int lockSerialNumber,
-	    final boolean successful) {
-	this.tagId = tagId;
-	this.sensorSerialNumber = sensorSerialNumber;
-	this.lockSerialNumber = lockSerialNumber;
-	this.successful = successful;
-    }
-
-    @Id
-    @Column(name = "sensor_event_id")
     public int getSensorEventId() {
 	return SensorEventId;
     }
@@ -40,7 +19,6 @@ public class SensorEvent {
 	SensorEventId = sensorEventId;
     }
 
-    @Column(name = "tag_id")
     public String getTagId() {
 	return tagId;
     }
@@ -49,7 +27,6 @@ public class SensorEvent {
 	this.tagId = tagId;
     }
 
-    @Column(name = "sensor_serial_number")
     public int getSensorSerialNumber() {
 	return sensorSerialNumber;
     }
@@ -58,7 +35,6 @@ public class SensorEvent {
 	this.sensorSerialNumber = sensorSerialNumber;
     }
 
-    @Column(name = "lock_serial_number")
     public int getLockSerialNumber() {
 	return lockSerialNumber;
     }
@@ -67,7 +43,6 @@ public class SensorEvent {
 	this.lockSerialNumber = lockSerialNumber;
     }
 
-    @Column(name = "event_timestamp")
     public Timestamp getTimestamp() {
 	return timestamp;
     }
@@ -76,13 +51,19 @@ public class SensorEvent {
 	this.timestamp = timestamp;
     }
 
-    @Column(name = "success")
     public boolean isSuccessful() {
 	return successful;
     }
 
     public void setSuccessful(final boolean successful) {
 	this.successful = successful;
+    }
+
+    @Override
+    public String toString() {
+	return "SensorEvent [SensorEventId=" + SensorEventId + ", tagId=" + tagId + ", sensorSerialNumber="
+		+ sensorSerialNumber + ", lockSerialNumber=" + lockSerialNumber + ", timestamp=" + timestamp
+		+ ", successful=" + successful + "]";
     }
 
 }

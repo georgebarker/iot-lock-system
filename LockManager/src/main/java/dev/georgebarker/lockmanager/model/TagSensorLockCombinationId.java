@@ -6,18 +6,18 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class TagSensorCombinationId implements Serializable {
+public class TagSensorLockCombinationId implements Serializable {
 
     private static final long serialVersionUID = 1773580746493371660L;
 
     private String tagId;
     private int sensorSerialNumber;
 
-    public TagSensorCombinationId() {
+    public TagSensorLockCombinationId() {
 	// Default constructor
     }
 
-    public TagSensorCombinationId(final String tagId, final int sensorSerialNumber) {
+    public TagSensorLockCombinationId(final String tagId, final int sensorSerialNumber) {
 	this.tagId = tagId;
 	this.sensorSerialNumber = sensorSerialNumber;
     }
@@ -42,7 +42,7 @@ public class TagSensorCombinationId implements Serializable {
 
     @Override
     public String toString() {
-	return "TagSensorCombinationId [tagId=" + tagId + ", sensorSerialNumber=" + sensorSerialNumber + "]";
+	return "TagSensorLockCombinationId [tagId=" + tagId + ", sensorSerialNumber=" + sensorSerialNumber + "]";
     }
 
     @Override
@@ -65,7 +65,7 @@ public class TagSensorCombinationId implements Serializable {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	final TagSensorCombinationId other = (TagSensorCombinationId) obj;
+	final TagSensorLockCombinationId other = (TagSensorLockCombinationId) obj;
 	if (sensorSerialNumber != other.sensorSerialNumber) {
 	    return false;
 	}
