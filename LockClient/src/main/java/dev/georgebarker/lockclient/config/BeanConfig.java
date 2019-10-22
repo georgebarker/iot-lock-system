@@ -1,36 +1,31 @@
-package dev.georgebarker.sensorclient.service;
-
-import javax.annotation.PostConstruct;
+package dev.georgebarker.lockclient.config;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.MqttTopic;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import dev.georgebarker.sensorclient.config.PropertyConfig;
+import com.google.gson.Gson;
 
-@Service
-public class MqttClientServiceImpl implements MqttClientService {
+@Configuration
+public class BeanConfig {
 
-    private static final Logger LOG = LogManager.getLogger(MqttClientServiceImpl.class);
+    private static final Logger LOG = LogManager.getLogger(BeanConfig.class);
 
     @Autowired
     PropertyConfig propertyConfig;
 
-    private MqttClient client;
-
-    @PostConstruct
-    @Override
-    public void setupMqttClient() throws MqttException {
+    @Bean
+    public MqttClient mqttClient() throws MqttException {
+	MqttClient client;
 	final String brokerUrl = getBrokerUrl();
 	final String userId = getUserId();
 	LOG.info("Setting up MQTT Client using Broker URL: {} and User ID: {}...", brokerUrl, userId);
 	try {
-	    client = new MqttClient(getBrokerUrl(), getUserId());
+	    client = new MqttClient(brokerUrl, userId);
 	    client.connect();
 	} catch (final MqttException e) {
 	    LOG.error("Client could not be created using Broker URL: {} and User ID: {}, quitting application.",
@@ -39,13 +34,12 @@ public class MqttClientServiceImpl implements MqttClientService {
 	}
 
 	LOG.info("Created MQTT Client successfully.");
+	return client;
     }
 
-    @Override
-    public void publishMessageToTopic(final MqttMessage message, final String topicName) throws MqttException {
-	final MqttTopic topic = client.getTopic(topicName);
-	topic.publish(message);
-
+    @Bean
+    public Gson gson() {
+	return new Gson();
     }
 
     private String getBrokerUrl() {

@@ -17,13 +17,13 @@ import dev.georgebarker.sensorclient.publisher.SensorEventPublisher;
 @Service
 public class SensorServiceImpl implements SensorService {
 
-    @Autowired
-    SensorEventPublisher sensorEventPublisher;
-
-    @Autowired
-    PropertyConfig propertyConfig;
-
     private static final Logger LOG = LogManager.getLogger(SensorServiceImpl.class);
+
+    @Autowired
+    private SensorEventPublisher sensorEventPublisher;
+
+    @Autowired
+    private PropertyConfig propertyConfig;
 
     @Override
     @PostConstruct

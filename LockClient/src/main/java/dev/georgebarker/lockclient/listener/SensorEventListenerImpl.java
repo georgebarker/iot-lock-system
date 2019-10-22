@@ -4,13 +4,13 @@ import javax.annotation.PostConstruct;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.georgebarker.lockclient.config.PropertyConfig;
-import dev.georgebarker.lockclient.service.MqttClientService;
 import dev.georgebarker.lockclient.service.SensorEventService;
 
 @Service
@@ -25,7 +25,7 @@ public class SensorEventListenerImpl extends BaseMqttListener implements SensorE
     private SensorEventService sensorEventService;
 
     @Autowired
-    private MqttClientService mqttClientService;
+    private MqttClient mqttClient;
 
     @Override
     @PostConstruct
@@ -33,7 +33,8 @@ public class SensorEventListenerImpl extends BaseMqttListener implements SensorE
 	final String topicName = getTopicName();
 	LOG.info("Attempting to subscribe to topic: {}...", topicName);
 	try {
-	    mqttClientService.subscribeToTopic(this, topicName);
+	    mqttClient.setCallback(this);
+	    mqttClient.subscribe(topicName);
 	    LOG.info("Subscribed to topic {}, listening for messages...", topicName);
 	} catch (final MqttException e) {
 	    LOG.error("Failed to subscribe to topic {}.", topicName);

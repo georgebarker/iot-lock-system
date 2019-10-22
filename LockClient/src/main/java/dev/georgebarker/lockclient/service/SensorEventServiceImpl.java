@@ -18,7 +18,8 @@ public class SensorEventServiceImpl implements SensorEventService {
     @Autowired
     private LockMotorService lockMotorService;
 
-    private final Gson gson = new Gson();
+    @Autowired
+    private Gson gson;
 
     @Override
     public void processSensorEventMessage(final MqttMessage message) {
