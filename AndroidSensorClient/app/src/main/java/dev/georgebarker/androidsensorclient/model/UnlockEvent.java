@@ -4,18 +4,18 @@ import java.util.Date;
 
 public class UnlockEvent {
     private long timestampMillis;
-    private int sensorSerialNumber;
+    private int roomNumber;
     private String tagId;
 
     public UnlockEvent(String deviceId, int sensorId) {
 	this.timestampMillis = new Date().getTime();
-	this.sensorSerialNumber = sensorId;
+	this.roomNumber = sensorId;
 	this.tagId = deviceId;
     }
 
     @Override
     public String toString() {
-	return "UnlockEvent [timestampMillis=" + timestampMillis + ", sensorSerialNumber=" + sensorSerialNumber
+	return "UnlockEvent [timestampMillis=" + timestampMillis + ", roomNumber=" + roomNumber
 		+ ", tagId=" + tagId + "]";
     }
 
@@ -27,12 +27,12 @@ public class UnlockEvent {
 	this.timestampMillis = timestampMillis;
     }
 
-    public int getSensorSerialNumber() {
-	return sensorSerialNumber;
+    public int getRoomNumber() {
+	return roomNumber;
     }
 
-    public void setSensorSerialNumber(final int sensorSerialNumber) {
-	this.sensorSerialNumber = sensorSerialNumber;
+    public void setRoomNumber(final int roomNumber) {
+	this.roomNumber = roomNumber;
     }
 
     public String getTagId() {

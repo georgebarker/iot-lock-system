@@ -4,22 +4,24 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Embeddable
-public class TagSensorLockCombinationId implements Serializable {
+public class TagRoomCombinationId implements Serializable {
 
     private static final long serialVersionUID = 1773580746493371660L;
 
     private String tagId;
-    private int sensorSerialNumber;
+    private Room room;
 
-    public TagSensorLockCombinationId() {
+    public TagRoomCombinationId() {
 	// Default constructor
     }
 
-    public TagSensorLockCombinationId(final String tagId, final int sensorSerialNumber) {
+    public TagRoomCombinationId(final String tagId, final Room room) {
 	this.tagId = tagId;
-	this.sensorSerialNumber = sensorSerialNumber;
+	this.room = room;
     }
 
     @Column(name = "tag_id")
@@ -31,25 +33,26 @@ public class TagSensorLockCombinationId implements Serializable {
 	this.tagId = tagId;
     }
 
-    @Column(name = "sensor_serial_number")
-    public int getSensorSerialNumber() {
-	return sensorSerialNumber;
+    @ManyToOne
+    @JoinColumn(name = "room_number")
+    public Room getRoom() {
+	return room;
     }
 
-    public void setSensorSerialNumber(final int sensorSerialNumber) {
-	this.sensorSerialNumber = sensorSerialNumber;
+    public void setRoom(final Room room) {
+	this.room = room;
     }
 
     @Override
     public String toString() {
-	return "TagSensorLockCombinationId [tagId=" + tagId + ", sensorSerialNumber=" + sensorSerialNumber + "]";
+	return "TagRoomCombinationId [tagId=" + tagId + ", room=" + room + "]";
     }
 
     @Override
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + sensorSerialNumber;
+	result = prime * result + ((room == null) ? 0 : room.hashCode());
 	result = prime * result + ((tagId == null) ? 0 : tagId.hashCode());
 	return result;
     }
@@ -65,8 +68,12 @@ public class TagSensorLockCombinationId implements Serializable {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	final TagSensorLockCombinationId other = (TagSensorLockCombinationId) obj;
-	if (sensorSerialNumber != other.sensorSerialNumber) {
+	final TagRoomCombinationId other = (TagRoomCombinationId) obj;
+	if (room == null) {
+	    if (other.room != null) {
+		return false;
+	    }
+	} else if (!room.equals(other.room)) {
 	    return false;
 	}
 	if (tagId == null) {
@@ -78,4 +85,5 @@ public class TagSensorLockCombinationId implements Serializable {
 	}
 	return true;
     }
+
 }

@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 
 import dev.georgebarker.lockmanager.model.ClientSensorEvent;
+import dev.georgebarker.lockmanager.model.Room;
 import dev.georgebarker.lockmanager.model.SensorEvent;
-import dev.georgebarker.lockmanager.model.TagSensorLockCombination;
-import dev.georgebarker.lockmanager.model.TagSensorLockCombinationId;
+import dev.georgebarker.lockmanager.model.TagRoomCombination;
+import dev.georgebarker.lockmanager.model.TagRoomCombinationId;
 import dev.georgebarker.lockmanager.publisher.SensorEventPublisher;
+import dev.georgebarker.lockmanager.repository.RoomRepository;
 import dev.georgebarker.lockmanager.repository.SensorEventRepository;
 import dev.georgebarker.lockmanager.repository.TagSensorCombinationRepository;
 
@@ -24,10 +26,13 @@ public class SensorEventServiceImpl implements SensorEventService {
     private static final Logger LOG = LogManager.getLogger(SensorEventServiceImpl.class);
 
     @Autowired
-    private TagSensorCombinationRepository tagSensorCombinationRepository;
+    private TagSensorCombinationRepository tagRoomCombinationRepository;
 
     @Autowired
     private SensorEventRepository sensorEventRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Autowired
     private SensorEventPublisher sensorEventPublisher;
@@ -39,13 +44,34 @@ public class SensorEventServiceImpl implements SensorEventService {
     public void processSensorEventMessage(final MqttMessage message) {
 	final ClientSensorEvent clientSensorEvent = transformMessageIntoClientSensorEvent(message);
 	LOG.info("Transformed message into Client Sensor Event {}", clientSensorEvent);
-	final TagSensorLockCombination tagSensorLockCombination = getTagSensorCombination(clientSensorEvent);
+
+	Room room = null;
+
+	// The Android client will allow the user to just specify their room number.
+	if (clientEventSpecifiesRoomNumber(clientSensorEvent)) {
+	    LOG.info("This request has specified a room number, no need to use Sensor Serial Number to retrieve it.");
+	    room = findRoomByRoomNumber(clientSensorEvent.getRoomNumber());
+	} else {
+	    LOG.info("This request has not specified a room number, using the Sensor Serial Number to retrieve it...");
+	    final int sensorSerialNumber = clientSensorEvent.getSensorSerialNumber();
+	    room = roomRepository.findBySensorSerialNumber(sensorSerialNumber);
+	}
+
+	if (room == null) {
+	    LOG.warn(
+		    "No valid room found using the Client Sensor Event {}, recording unsuccessful event & terminating pipeline...",
+		    clientSensorEvent);
+	    final SensorEvent sensorEvent = recordSensorEvent(clientSensorEvent, 0, false);
+	    sensorEventPublisher.publish(sensorEvent);
+	    return;
+	}
+
+	final TagRoomCombination tagRoomCombination = getTagRoomCombination(clientSensorEvent.getTagId(), room);
 
 	SensorEvent sensorEvent;
-	if (tagSensorLockCombination != null) {
-	    LOG.info("Found Tag Sensor Lock Combination: {}, recording successful sensor event...",
-		    tagSensorLockCombination);
-	    final int lockSerialNumber = tagSensorLockCombination.getLockSerialNumber();
+	if (tagRoomCombination != null) {
+	    LOG.info("Found Tag Room Combination: {}, recording successful sensor event...", tagRoomCombination);
+	    final int lockSerialNumber = room.getLockSerialNumber();
 	    sensorEvent = recordSensorEvent(clientSensorEvent, lockSerialNumber, true);
 	} else {
 	    LOG.warn(
@@ -63,10 +89,9 @@ public class SensorEventServiceImpl implements SensorEventService {
 	return gson.fromJson(message.toString(), ClientSensorEvent.class);
     }
 
-    private TagSensorLockCombination getTagSensorCombination(final ClientSensorEvent clientSensorEvent) {
-	final TagSensorLockCombinationId id = new TagSensorLockCombinationId(clientSensorEvent.getTagId(),
-		clientSensorEvent.getSensorSerialNumber());
-	final Optional<TagSensorLockCombination> tagSensorCombination = tagSensorCombinationRepository.findById(id);
+    private TagRoomCombination getTagRoomCombination(final String tagId, final Room room) {
+	final TagRoomCombinationId id = new TagRoomCombinationId(tagId, room);
+	final Optional<TagRoomCombination> tagSensorCombination = tagRoomCombinationRepository.findById(id);
 
 	if (tagSensorCombination.isPresent()) {
 	    return tagSensorCombination.get();
@@ -80,6 +105,15 @@ public class SensorEventServiceImpl implements SensorEventService {
 	final SensorEvent sensorEvent = new SensorEvent(clientSensorEvent.getTagId(),
 		clientSensorEvent.getSensorSerialNumber(), lockSerialNumber, isSuccessful);
 	return sensorEventRepository.save(sensorEvent);
+    }
+
+    private boolean clientEventSpecifiesRoomNumber(final ClientSensorEvent clientSensorEvent) {
+	return clientSensorEvent.getRoomNumber() != 0;
+    }
+
+    private Room findRoomByRoomNumber(final int roomNumber) {
+	final Optional<Room> optionalRoom = roomRepository.findById(roomNumber);
+	return optionalRoom.isPresent() ? optionalRoom.get() : null;
     }
 
 }

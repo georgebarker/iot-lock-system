@@ -1,25 +1,17 @@
-/* Tag ID, Sensor ID, Motor ID, Disabled */
-INSERT INTO tag_sensor_lock_combination VALUES (
-"3",
-388496,
-3063399,
-0
-);
-INSERT INTO tag_sensor_lock_combination VALUES (
-"0b0051959c",
-582634,
-3069029,
-0
-);
-INSERT INTO tag_sensor_lock_combination VALUES (
-"5f00dba77e",
+INSERT INTO room VALUES (
+205,
 582364,
-3076559,
+3076559
+);
+
+INSERT INTO tag_room_combination VALUES (
+"5f00dba77e",
+205,
 0
 );
-INSERT INTO tag_sensor_lock_combination VALUES (
+
+INSERT INTO tag_room_combination VALUES (
 "android-device",
-1,
-3076559,
+205,
 0
 );
