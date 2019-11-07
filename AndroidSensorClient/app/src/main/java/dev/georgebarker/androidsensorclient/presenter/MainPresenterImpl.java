@@ -2,15 +2,20 @@ package dev.georgebarker.androidsensorclient.presenter;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
+import dev.georgebarker.androidsensorclient.listener.SensorEventListener;
+import dev.georgebarker.androidsensorclient.listener.SensorEventListenerImpl;
+import dev.georgebarker.androidsensorclient.listener.SensorEventSubscriber;
+import dev.georgebarker.androidsensorclient.model.SensorEvent;
 import dev.georgebarker.androidsensorclient.model.UnlockEvent;
 import dev.georgebarker.androidsensorclient.publisher.UnlockEventPublisher;
 import dev.georgebarker.androidsensorclient.publisher.UnlockEventPublisherImpl;
 import dev.georgebarker.androidsensorclient.view.MainView;
 
-public class MainPresenterImpl implements MainPresenter {
+public class MainPresenterImpl implements MainPresenter, SensorEventSubscriber {
 
     private MainView mainView;
     private UnlockEventPublisher unlockEventPublisher;
+    private SensorEventListener sensorEventListener;
 
     public MainPresenterImpl(MainView mainView) {
         this.mainView = mainView;
@@ -19,6 +24,7 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void onViewPrepared() {
         try {
+            sensorEventListener = new SensorEventListenerImpl(mainView.getContext(), this);
             unlockEventPublisher = new UnlockEventPublisherImpl(mainView.getContext());
         } catch (MqttException e) {
             mainView.onError("Failed to connect to server. Please restart and try again.");
@@ -35,6 +41,11 @@ public class MainPresenterImpl implements MainPresenter {
 
         UnlockEvent unlockEvent = new UnlockEvent(deviceId, Integer.valueOf(sensorId));
         publishSensorEvent(unlockEvent);
+    }
+
+    @Override
+    public void processSensorEventMessage(SensorEvent sensorEvent) {
+        mainView.onError(sensorEvent.toString());
     }
 
     private void publishSensorEvent(UnlockEvent unlockEvent) {

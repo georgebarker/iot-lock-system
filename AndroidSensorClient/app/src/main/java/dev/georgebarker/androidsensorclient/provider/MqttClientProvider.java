@@ -17,10 +17,10 @@ public class MqttClientProvider {
     private static MqttClient mqttClient;
 
     private MqttClientProvider() {
-        // can't create
+        // Provider class, should not be able to instantiate.
     }
 
-    public static MqttClient getMqttClient(Context context) throws MqttException {
+    public static synchronized MqttClient getMqttClient(Context context) throws MqttException {
         if (mqttClient == null) {
             String brokerUrl = getBrokerUrl(context);
             String userId = getUserId(context);

@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import dev.georgebarker.lockmanager.model.Room;
 import dev.georgebarker.lockmanager.model.SensorEvent;
 import dev.georgebarker.lockmanager.model.TagRoomCombination;
 import dev.georgebarker.lockmanager.model.TagRoomCombinationId;
@@ -60,7 +61,7 @@ public class SensorEventServiceImplTest {
     private void givenIHaveAMessageWithAnInvalidCombination() {
 	message = new MqttMessage();
 	message.setPayload(INVALID_MESSAGE_JSON.getBytes());
-	final TagRoomCombination tagSensorCombination = createTagSensorCombination("invalid-tag", 999);
+	final TagRoomCombination tagSensorCombination = createTagRoomCombination("invalid-tag");
 	Mockito.when(tagSensorCombinationRepository.findById(tagSensorCombination.getTagSensorLockCombinationId()))
 		.thenReturn(Optional.empty());
     }
@@ -68,7 +69,7 @@ public class SensorEventServiceImplTest {
     private void givenIHaveAMessageWithAValidCombination() {
 	message = new MqttMessage();
 	message.setPayload(VALID_MESSAGE_JSON.getBytes());
-	final TagRoomCombination tagSensorCombination = createTagSensorCombination("valid-tag", 388496);
+	final TagRoomCombination tagSensorCombination = createTagRoomCombination("valid-tag");
 	Mockito.when(tagSensorCombinationRepository.findById(tagSensorCombination.getTagSensorLockCombinationId()))
 		.thenReturn(Optional.of(tagSensorCombination));
     }
@@ -97,8 +98,9 @@ public class SensorEventServiceImplTest {
 	Mockito.verify(sensorEventPublisher).publish(sensorEvent);
     }
 
-    private TagRoomCombination createTagSensorCombination(final String tagId, final int sensorSerialNumber) {
-	final TagRoomCombinationId id = new TagRoomCombinationId(tagId, sensorSerialNumber);
+    private TagRoomCombination createTagRoomCombination(final String tagId) {
+	final Room room = new Room(205, 123, 456);
+	final TagRoomCombinationId id = new TagRoomCombinationId(tagId, room);
 	final TagRoomCombination tagSensorCombination = new TagRoomCombination();
 	tagSensorCombination.setTagSensorLockCombinationId(id);
 	tagSensorCombination.setDisabled(false);

@@ -13,6 +13,16 @@ public class Room {
     private int sensorSerialNumber;
     private int lockSerialNumber;
 
+    public Room() {
+	// Default constructor
+    }
+
+    public Room(final int roomNumber, final int sensorSerialNumber, final int lockSerialNumber) {
+	this.roomNumber = roomNumber;
+	this.sensorSerialNumber = sensorSerialNumber;
+	this.lockSerialNumber = lockSerialNumber;
+    }
+
     @Id
     @Column(name = "room_number")
     public int getRoomNumber() {
