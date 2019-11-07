@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AndroidSensorClient</string>
+    <string name="lock_client_topic_name">15117733/lock-client-sensor-events</string>
+    <string name="sensor_client_topic_name">15117733/sensor-client-sensor-events</string>
+    <string name="broker_url">tcp://broker.mqttdashboard.com:1883</string>
+    <string name="user_id">15117733-android-sensor-client</string>
 </resources>

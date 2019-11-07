@@ -17,3 +17,9 @@ INSERT INTO tag_sensor_lock_combination VALUES (
 3076559,
 0
 );
+INSERT INTO tag_sensor_lock_combination VALUES (
+"android-device",
+1,
+3076559,
+0
+);
