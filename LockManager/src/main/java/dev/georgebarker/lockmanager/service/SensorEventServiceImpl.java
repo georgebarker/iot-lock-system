@@ -54,7 +54,7 @@ public class SensorEventServiceImpl implements SensorEventService {
 	    sensorEvent = recordSensorEvent(clientSensorEvent, 0, false);
 	}
 
-	LOG.info("Recorded successful sensor event, publishing sensor event...");
+	LOG.info("Recorded sensor event, publishing sensor event...");
 	sensorEventPublisher.publish(sensorEvent);
 
     }
