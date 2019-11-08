@@ -15,7 +15,8 @@ CREATE TABLE sensor_event(
     room_number INT,
     lock_serial_number INT,
     event_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    success BOOLEAN NOT NULL
+    success BOOLEAN NOT NULL,
+    message VARCHAR(256)
 );
 
 

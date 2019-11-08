@@ -62,7 +62,7 @@ public class SensorEventServiceImplTest {
 	message = new MqttMessage();
 	message.setPayload(INVALID_MESSAGE_JSON.getBytes());
 	final TagRoomCombination tagSensorCombination = createTagRoomCombination("invalid-tag");
-	Mockito.when(tagSensorCombinationRepository.findById(tagSensorCombination.getTagSensorLockCombinationId()))
+	Mockito.when(tagSensorCombinationRepository.findById(tagSensorCombination.getTagRoomCombinationId()))
 		.thenReturn(Optional.empty());
     }
 
@@ -70,7 +70,7 @@ public class SensorEventServiceImplTest {
 	message = new MqttMessage();
 	message.setPayload(VALID_MESSAGE_JSON.getBytes());
 	final TagRoomCombination tagSensorCombination = createTagRoomCombination("valid-tag");
-	Mockito.when(tagSensorCombinationRepository.findById(tagSensorCombination.getTagSensorLockCombinationId()))
+	Mockito.when(tagSensorCombinationRepository.findById(tagSensorCombination.getTagRoomCombinationId()))
 		.thenReturn(Optional.of(tagSensorCombination));
     }
 
@@ -102,7 +102,7 @@ public class SensorEventServiceImplTest {
 	final Room room = new Room(205, 123, 456);
 	final TagRoomCombinationId id = new TagRoomCombinationId(tagId, room);
 	final TagRoomCombination tagSensorCombination = new TagRoomCombination();
-	tagSensorCombination.setTagSensorLockCombinationId(id);
+	tagSensorCombination.setTagRoomCombinationId(id);
 	tagSensorCombination.setDisabled(false);
 
 	return tagSensorCombination;

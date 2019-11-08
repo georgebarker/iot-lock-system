@@ -61,7 +61,8 @@ public class SensorEventServiceImpl implements SensorEventService {
 	    LOG.warn(
 		    "No valid room found using the Client Sensor Event {}, recording and publishing unsuccessful event & terminating pipeline...",
 		    clientSensorEvent);
-	    final SensorEvent sensorEvent = recordSensorEvent(clientSensorEvent, null, null, false);
+	    final SensorEvent sensorEvent = recordSensorEvent(clientSensorEvent, clientSensorEvent.getRoomNumber(),
+		    null, false, "The room does not exist.");
 	    sensorEventPublisher.publish(sensorEvent);
 	    return;
 	}
@@ -71,12 +72,13 @@ public class SensorEventServiceImpl implements SensorEventService {
 	SensorEvent sensorEvent;
 	if (tagRoomCombination != null) {
 	    LOG.info("Found Tag Room Combination: {}, recording successful sensor event...", tagRoomCombination);
-	    sensorEvent = recordSensorEvent(clientSensorEvent, room.getRoomNumber(), room.getLockSerialNumber(), true);
+	    sensorEvent = recordSensorEvent(clientSensorEvent, room.getRoomNumber(), room.getLockSerialNumber(), true,
+		    "Room opened.");
 	} else {
-	    LOG.warn(
-		    "No combination found for Tag ID: {} and Sensor Serial Number {}, recording unsuccessful sensor event...",
-		    clientSensorEvent.getTagId(), clientSensorEvent.getSensorSerialNumber());
-	    sensorEvent = recordSensorEvent(clientSensorEvent, room.getRoomNumber(), null, false);
+	    LOG.warn("No combination found for Tag ID: {} and Room {}, recording unsuccessful sensor event...",
+		    clientSensorEvent.getTagId(), room.getRoomNumber());
+	    sensorEvent = recordSensorEvent(clientSensorEvent, room.getRoomNumber(), null, false,
+		    "Device/Tag does not have permission to open this room.");
 	}
 
 	LOG.info("Recorded sensor event, publishing sensor event...");
@@ -100,9 +102,9 @@ public class SensorEventServiceImpl implements SensorEventService {
     }
 
     private SensorEvent recordSensorEvent(final ClientSensorEvent clientSensorEvent, final Integer roomNumber,
-	    final Integer lockSerialNumber, final boolean isSuccessful) {
+	    final Integer lockSerialNumber, final boolean isSuccessful, final String message) {
 	final SensorEvent sensorEvent = new SensorEvent(clientSensorEvent.getTagId(), roomNumber, lockSerialNumber,
-		isSuccessful);
+		isSuccessful, message);
 	return sensorEventRepository.save(sensorEvent);
     }
 

@@ -17,18 +17,20 @@ public class SensorEvent {
     private Integer lockSerialNumber;
     private Timestamp timestamp;
     private boolean successful;
+    private String message;
 
     public SensorEvent() {
 	// Default constructor
     }
 
     public SensorEvent(final String tagId, final Integer roomNumber, final Integer lockSerialNumber,
-	    final boolean successful) {
+	    final boolean successful, final String message) {
 	this.tagId = tagId;
 	this.roomNumber = roomNumber;
 	this.lockSerialNumber = lockSerialNumber;
 	this.successful = successful;
 	this.timestamp = new Timestamp(System.currentTimeMillis());
+	this.message = message;
     }
 
     @Id
@@ -86,11 +88,20 @@ public class SensorEvent {
 	this.successful = successful;
     }
 
+    @Column(name = "message")
+    public String getMessage() {
+	return message;
+    }
+
+    public void setMessage(final String message) {
+	this.message = message;
+    }
+
     @Override
     public String toString() {
 	return "SensorEvent [SensorEventId=" + SensorEventId + ", tagId=" + tagId + ", roomNumber=" + roomNumber
 		+ ", lockSerialNumber=" + lockSerialNumber + ", timestamp=" + timestamp + ", successful=" + successful
-		+ "]";
+		+ ", message=" + message + "]";
     }
 
 }

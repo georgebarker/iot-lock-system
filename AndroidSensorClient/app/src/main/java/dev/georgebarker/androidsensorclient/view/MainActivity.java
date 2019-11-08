@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -36,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @BindView(R.id.recycler_view_sensor_events)
     RecyclerView sensorEventsRecyclerView;
+
+    @BindView(R.id.text_view_waiting_for_events)
+    TextView waitingForEventsTextView;
 
     private SensorEventRecyclerViewAdapter sensorEventRecyclerViewAdapter;
 
@@ -71,7 +75,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void addSensorEvent(SensorEvent sensorEvent) {
-        runOnUiThread(() -> sensorEventRecyclerViewAdapter.addSensorEvent(sensorEvent));
+        runOnUiThread(() -> {
+            waitingForEventsTextView.setVisibility(View.GONE);
+            sensorEventsRecyclerView.setVisibility(View.VISIBLE);
+            sensorEventRecyclerViewAdapter.addSensorEvent(sensorEvent); });
     }
 
     private String getDeviceId() {

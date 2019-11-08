@@ -39,6 +39,7 @@ public class SensorEventRecyclerViewAdapter extends RecyclerView.Adapter<SensorE
         holder.roomNumberTextView.setText(String.valueOf(sensorEvent.getRoomNumber()));
         holder.tagIdTextView.setText(sensorEvent.getTagId());
         holder.timestampTextView.setText(sensorEvent.getTimestamp().toString());
+        holder.messageTextView.setText(sensorEvent.getMessage());
         String backgroundColor = sensorEvent.isSuccessful() ? SUCCESSFUL_BACKGROUND_COLOR : UNSUCCESSFUL_BACKGROUND_COLOR;
         int successIconDrawable = sensorEvent.isSuccessful() ? R.drawable.success_button : R.drawable.error_button;
         holder.sensorEventItemLayout.setBackgroundColor(Color.parseColor(backgroundColor));
@@ -71,6 +72,9 @@ public class SensorEventRecyclerViewAdapter extends RecyclerView.Adapter<SensorE
 
         @BindView(R.id.image_view_success)
         ImageView successImageView;
+
+        @BindView(R.id.text_view_message)
+        TextView messageTextView;
 
         SensorEventViewHolder(@NonNull View itemView) {
             super(itemView);

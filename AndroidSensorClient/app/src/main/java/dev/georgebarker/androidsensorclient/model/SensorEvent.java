@@ -9,6 +9,7 @@ public class SensorEvent {
     private int roomNumber;
     private Timestamp timestamp;
     private boolean successful;
+    private String message;
 
     public int getRoomNumber() {
         return roomNumber;
@@ -50,14 +51,11 @@ public class SensorEvent {
 	this.successful = successful;
     }
 
-    @Override
-    public String toString() {
-        return "SensorEvent{" +
-                "SensorEventId=" + SensorEventId +
-                ", tagId='" + tagId + '\'' +
-                ", roomNumber=" + roomNumber +
-                ", timestamp=" + timestamp +
-                ", successful=" + successful +
-                '}';
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

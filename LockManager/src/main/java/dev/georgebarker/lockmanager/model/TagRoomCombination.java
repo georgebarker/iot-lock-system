@@ -13,11 +13,11 @@ public class TagRoomCombination {
     private boolean disabled;
 
     @EmbeddedId
-    public TagRoomCombinationId getTagSensorLockCombinationId() {
+    public TagRoomCombinationId getTagRoomCombinationId() {
 	return tagRoomCombinationId;
     }
 
-    public void setTagSensorLockCombinationId(final TagRoomCombinationId tagRoomCombinationId) {
+    public void setTagRoomCombinationId(final TagRoomCombinationId tagRoomCombinationId) {
 	this.tagRoomCombinationId = tagRoomCombinationId;
     }
 
