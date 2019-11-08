@@ -13,8 +13,8 @@ public class SensorEvent {
 
     private int SensorEventId;
     private String tagId;
-    private int sensorSerialNumber;
-    private int lockSerialNumber;
+    private Integer roomNumber;
+    private Integer lockSerialNumber;
     private Timestamp timestamp;
     private boolean successful;
 
@@ -22,12 +22,13 @@ public class SensorEvent {
 	// Default constructor
     }
 
-    public SensorEvent(final String tagId, final int sensorSerialNumber, final int lockSerialNumber,
+    public SensorEvent(final String tagId, final Integer roomNumber, final Integer lockSerialNumber,
 	    final boolean successful) {
 	this.tagId = tagId;
-	this.sensorSerialNumber = sensorSerialNumber;
+	this.roomNumber = roomNumber;
 	this.lockSerialNumber = lockSerialNumber;
 	this.successful = successful;
+	this.timestamp = new Timestamp(System.currentTimeMillis());
     }
 
     @Id
@@ -49,21 +50,21 @@ public class SensorEvent {
 	this.tagId = tagId;
     }
 
-    @Column(name = "sensor_serial_number")
-    public int getSensorSerialNumber() {
-	return sensorSerialNumber;
+    @Column(name = "room_number")
+    public Integer getRoomNumber() {
+	return roomNumber;
     }
 
-    public void setSensorSerialNumber(final int sensorSerialNumber) {
-	this.sensorSerialNumber = sensorSerialNumber;
+    public void setRoomNumber(final Integer roomNumber) {
+	this.roomNumber = roomNumber;
     }
 
     @Column(name = "lock_serial_number")
-    public int getLockSerialNumber() {
+    public Integer getLockSerialNumber() {
 	return lockSerialNumber;
     }
 
-    public void setLockSerialNumber(final int lockSerialNumber) {
+    public void setLockSerialNumber(final Integer lockSerialNumber) {
 	this.lockSerialNumber = lockSerialNumber;
     }
 
@@ -83,6 +84,13 @@ public class SensorEvent {
 
     public void setSuccessful(final boolean successful) {
 	this.successful = successful;
+    }
+
+    @Override
+    public String toString() {
+	return "SensorEvent [SensorEventId=" + SensorEventId + ", tagId=" + tagId + ", roomNumber=" + roomNumber
+		+ ", lockSerialNumber=" + lockSerialNumber + ", timestamp=" + timestamp + ", successful=" + successful
+		+ "]";
     }
 
 }

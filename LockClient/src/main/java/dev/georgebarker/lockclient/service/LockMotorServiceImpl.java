@@ -19,7 +19,7 @@ import dev.georgebarker.lockclient.config.PropertyConfig;
 public class LockMotorServiceImpl implements LockMotorService {
 
     private static final Logger LOG = LogManager.getLogger(LockMotorServiceImpl.class);
-    private static final double LOCKED_POSITION_DEGREES = 180;
+    private static final double LOCKED_POSITION_DEGREES = 90;
     private static final double UNLOCKED_POSITION_DEGREES = 0;
     private static final int UNLOCKING_WAIT_TIME_SECS = 3;
 
@@ -75,11 +75,11 @@ public class LockMotorServiceImpl implements LockMotorService {
 	    TimeUnit.SECONDS.sleep(UNLOCKING_WAIT_TIME_SECS);
 	    LOG.info("Setting target position to locked ({} degrees)...", LOCKED_POSITION_DEGREES);
 	    setMotorPosition(LOCKED_POSITION_DEGREES);
-	    LOG.info("Motor locked.");
 	} catch (final PhidgetException e) {
 	    LOG.error("Failed to perform unlock", e);
 	} catch (final InterruptedException e) {
 	    LOG.error("The sleep action when waiting to re-lock the motor was interrupted", e);
+	} finally {
 	}
     }
 

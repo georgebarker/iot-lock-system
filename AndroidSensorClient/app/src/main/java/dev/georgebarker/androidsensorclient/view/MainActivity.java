@@ -1,6 +1,8 @@
 package dev.georgebarker.androidsensorclient.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dev.georgebarker.androidsensorclient.model.SensorEvent;
 import dev.georgebarker.androidsensorclient.presenter.MainPresenter;
 import dev.georgebarker.androidsensorclient.presenter.MainPresenterImpl;
 import dev.georgebarker.androidsensorclient.R;
@@ -31,6 +34,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @BindView(R.id.main_activity_parent_view)
     View parentView;
 
+    @BindView(R.id.recycler_view_sensor_events)
+    RecyclerView sensorEventsRecyclerView;
+
+    private SensorEventRecyclerViewAdapter sensorEventRecyclerViewAdapter;
+
     private MainPresenter mainPresenter;
 
     @Override
@@ -43,6 +51,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         unlockButton.setOnClickListener(view -> mainPresenter.onUnlockButtonClicked(getDeviceId(), getSensorId()));
 
+        sensorEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        sensorEventRecyclerViewAdapter = new SensorEventRecyclerViewAdapter();
+        sensorEventsRecyclerView.setAdapter(sensorEventRecyclerViewAdapter);
+
+
         mainPresenter.onViewPrepared();
     }
 
@@ -54,6 +67,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void onError(String message) {
         Snackbar.make(parentView, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void addSensorEvent(SensorEvent sensorEvent) {
+        runOnUiThread(() -> sensorEventRecyclerViewAdapter.addSensorEvent(sensorEvent));
     }
 
     private String getDeviceId() {

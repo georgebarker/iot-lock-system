@@ -60,11 +60,12 @@
             android:layout_width="180dp"
             android:layout_height="60dp"
             android:text="Unlock"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="12dp"
+            android:enabled="false"/>
     </LinearLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_sensor_events"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toBottomOf="@id/linear_layout_device_sensor_id_container"/>

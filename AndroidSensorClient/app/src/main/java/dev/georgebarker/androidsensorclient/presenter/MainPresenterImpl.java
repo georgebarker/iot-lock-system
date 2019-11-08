@@ -15,7 +15,6 @@ public class MainPresenterImpl implements MainPresenter, SensorEventSubscriber {
 
     private MainView mainView;
     private UnlockEventPublisher unlockEventPublisher;
-    private SensorEventListener sensorEventListener;
 
     public MainPresenterImpl(MainView mainView) {
         this.mainView = mainView;
@@ -24,7 +23,7 @@ public class MainPresenterImpl implements MainPresenter, SensorEventSubscriber {
     @Override
     public void onViewPrepared() {
         try {
-            sensorEventListener = new SensorEventListenerImpl(mainView.getContext(), this);
+            new SensorEventListenerImpl(mainView.getContext(), this);
             unlockEventPublisher = new UnlockEventPublisherImpl(mainView.getContext());
         } catch (MqttException e) {
             mainView.onError("Failed to connect to server. Please restart and try again.");
@@ -44,8 +43,8 @@ public class MainPresenterImpl implements MainPresenter, SensorEventSubscriber {
     }
 
     @Override
-    public void processSensorEventMessage(SensorEvent sensorEvent) {
-        mainView.onError(sensorEvent.toString());
+    public void processSensorEvent(SensorEvent sensorEvent) {
+        mainView.addSensorEvent(sensorEvent);
     }
 
     private void publishSensorEvent(UnlockEvent unlockEvent) {

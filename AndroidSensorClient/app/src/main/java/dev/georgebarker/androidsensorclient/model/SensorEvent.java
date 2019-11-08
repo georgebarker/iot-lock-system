@@ -6,10 +6,17 @@ public class SensorEvent {
 
     private int SensorEventId;
     private String tagId;
-    private int sensorSerialNumber;
-    private int lockSerialNumber;
+    private int roomNumber;
     private Timestamp timestamp;
     private boolean successful;
+
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(int roomNumber) {
+        this.roomNumber = roomNumber;
+    }
 
     public int getSensorEventId() {
 	return SensorEventId;
@@ -25,22 +32,6 @@ public class SensorEvent {
 
     public void setTagId(final String tagId) {
 	this.tagId = tagId;
-    }
-
-    public int getSensorSerialNumber() {
-	return sensorSerialNumber;
-    }
-
-    public void setSensorSerialNumber(final int sensorSerialNumber) {
-	this.sensorSerialNumber = sensorSerialNumber;
-    }
-
-    public int getLockSerialNumber() {
-	return lockSerialNumber;
-    }
-
-    public void setLockSerialNumber(final int lockSerialNumber) {
-	this.lockSerialNumber = lockSerialNumber;
     }
 
     public Timestamp getTimestamp() {
@@ -64,8 +55,7 @@ public class SensorEvent {
         return "SensorEvent{" +
                 "SensorEventId=" + SensorEventId +
                 ", tagId='" + tagId + '\'' +
-                ", sensorSerialNumber=" + sensorSerialNumber +
-                ", lockSerialNumber=" + lockSerialNumber +
+                ", roomNumber=" + roomNumber +
                 ", timestamp=" + timestamp +
                 ", successful=" + successful +
                 '}';

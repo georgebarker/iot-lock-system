@@ -47,7 +47,7 @@ public class SensorEventListenerImpl extends BaseMqttListener implements SensorE
     public void messageArrived(final String topic, final MqttMessage message) {
 	Log.i(TAG, "Received " + message + " on topic " + topic + ", processing sensor event message...");
 	SensorEvent sensorEvent = transformMessageIntoSensorEvent(message);
-        sensorEventSubscriber.processSensorEventMessage(sensorEvent);
+        sensorEventSubscriber.processSensorEvent(sensorEvent);
     }
 
     private String getTopicName() {
