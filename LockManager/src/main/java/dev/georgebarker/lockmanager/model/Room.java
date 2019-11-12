@@ -51,4 +51,10 @@ public class Room {
 	this.lockSerialNumber = lockSerialNumber;
     }
 
+    @Override
+    public String toString() {
+	return "Room [roomNumber=" + roomNumber + ", sensorSerialNumber=" + sensorSerialNumber + ", lockSerialNumber="
+		+ lockSerialNumber + "]";
+    }
+
 }

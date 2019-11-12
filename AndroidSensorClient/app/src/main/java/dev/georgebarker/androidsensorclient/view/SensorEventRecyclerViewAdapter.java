@@ -57,6 +57,11 @@ public class SensorEventRecyclerViewAdapter extends RecyclerView.Adapter<SensorE
         notifyDataSetChanged();
     }
 
+    public void clearSensorEvents() {
+        sensorEvents.clear();
+        notifyDataSetChanged();
+    }
+
     static class SensorEventViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.text_view_room_number)
         TextView roomNumberTextView;

@@ -18,7 +18,7 @@ import dev.georgebarker.lockmanager.model.TagRoomCombinationId;
 import dev.georgebarker.lockmanager.publisher.SensorEventPublisher;
 import dev.georgebarker.lockmanager.repository.RoomRepository;
 import dev.georgebarker.lockmanager.repository.SensorEventRepository;
-import dev.georgebarker.lockmanager.repository.TagSensorCombinationRepository;
+import dev.georgebarker.lockmanager.repository.TagRoomCombinationRepository;
 
 @Service
 public class SensorEventServiceImpl implements SensorEventService {
@@ -26,7 +26,7 @@ public class SensorEventServiceImpl implements SensorEventService {
     private static final Logger LOG = LogManager.getLogger(SensorEventServiceImpl.class);
 
     @Autowired
-    private TagSensorCombinationRepository tagRoomCombinationRepository;
+    private TagRoomCombinationRepository tagRoomCombinationRepository;
 
     @Autowired
     private SensorEventRepository sensorEventRepository;

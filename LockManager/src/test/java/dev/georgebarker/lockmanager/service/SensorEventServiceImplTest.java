@@ -19,7 +19,7 @@ import dev.georgebarker.lockmanager.model.TagRoomCombination;
 import dev.georgebarker.lockmanager.model.TagRoomCombinationId;
 import dev.georgebarker.lockmanager.publisher.SensorEventPublisher;
 import dev.georgebarker.lockmanager.repository.SensorEventRepository;
-import dev.georgebarker.lockmanager.repository.TagSensorCombinationRepository;
+import dev.georgebarker.lockmanager.repository.TagRoomCombinationRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class SensorEventServiceImplTest {
@@ -31,7 +31,7 @@ public class SensorEventServiceImplTest {
     private SensorEvent sensorEvent;
 
     @Mock
-    TagSensorCombinationRepository tagSensorCombinationRepository;
+    TagRoomCombinationRepository tagSensorCombinationRepository;
 
     @Mock
     SensorEventRepository sensorEventRepository;

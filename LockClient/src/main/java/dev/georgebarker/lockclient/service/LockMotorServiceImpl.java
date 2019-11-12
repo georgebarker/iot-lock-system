@@ -79,7 +79,6 @@ public class LockMotorServiceImpl implements LockMotorService {
 	    LOG.error("Failed to perform unlock", e);
 	} catch (final InterruptedException e) {
 	    LOG.error("The sleep action when waiting to re-lock the motor was interrupted", e);
-	} finally {
 	}
     }
 
