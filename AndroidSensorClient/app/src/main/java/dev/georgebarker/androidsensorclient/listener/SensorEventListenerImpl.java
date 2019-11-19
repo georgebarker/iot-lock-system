@@ -31,27 +31,27 @@ public class SensorEventListenerImpl extends BaseMqttListener implements SensorE
     }
 
     public void subscribeToTopic() throws MqttException {
-	final String topicName = getTopicName();
-	Log.i(TAG, "Attempting to subscribe to topic: " + topicName + "...");
-	try {
-	    mqttClient.setCallback(this);
-	    mqttClient.subscribe(topicName);
-        Log.i(TAG, "Subscribed to topic " + topicName + ", listening for messages...");
-	} catch (final MqttException e) {
-        Log.e(TAG, "Failed to subscribe to topic " + topicName + ".");
-        throw e;
-	}
+        final String topicName = getTopicName();
+        Log.i(TAG, "Attempting to subscribe to topic: " + topicName + "...");
+        try {
+            mqttClient.setCallback(this);
+            mqttClient.subscribe(topicName);
+            Log.i(TAG, "Subscribed to topic " + topicName + ", listening for messages...");
+        } catch (final MqttException e) {
+            Log.e(TAG, "Failed to subscribe to topic " + topicName + ".");
+            throw e;
+        }
     }
 
     @Override
     public void messageArrived(final String topic, final MqttMessage message) {
-	Log.i(TAG, "Received " + message + " on topic " + topic + ", processing sensor event message...");
-	SensorEvent sensorEvent = transformMessageIntoSensorEvent(message);
+        Log.i(TAG, "Received " + message + " on topic " + topic + ", processing sensor event message...");
+        SensorEvent sensorEvent = transformMessageIntoSensorEvent(message);
         sensorEventSubscriber.processSensorEvent(sensorEvent);
     }
 
     private String getTopicName() {
-	return context.getString(R.string.lock_client_topic_name);
+        return context.getString(R.string.lock_client_topic_name);
     }
 
     private SensorEvent transformMessageIntoSensorEvent(MqttMessage message) {

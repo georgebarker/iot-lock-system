@@ -5,8 +5,7 @@ DROP TABLE IF EXISTS room;
 create table room(
     room_number INT PRIMARY KEY NOT NULL,
     sensor_serial_number INT NOT NULL,
-    lock_serial_number INT NOT NULL,
-    UNIQUE KEY (room_number, sensor_serial_number, lock_serial_number)
+    lock_serial_number INT NOT NULL
 );
 
 CREATE TABLE sensor_event(

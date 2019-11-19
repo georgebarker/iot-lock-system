@@ -2,10 +2,17 @@ package dev.georgebarker.androidsensorclient.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +26,7 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +39,7 @@ import dev.georgebarker.androidsensorclient.R;
 public class MainActivity extends AppCompatActivity implements MainView {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String CHANNEL_ID = "notification-channel";
 
     @BindView(R.id.edit_text_device_id)
     EditText deviceIdEditText;
@@ -78,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         setupRoomNumberSpinner();
         setupSensorEventsRecyclerView();
 
+        createNotificationChannel();
+
         mainPresenter.onViewPrepared();
     }
 
@@ -96,15 +107,18 @@ public class MainActivity extends AppCompatActivity implements MainView {
         int roomNumber = sensorEvent.getRoomNumber();
         if (roomNumber != selectedRoomNumber) {
             Log.w(TAG, "Won't add Sensor Event, user has room " + selectedRoomNumber + "selected, but this event is for room: " + roomNumber);
+            return;
         }
         runOnUiThread(() -> {
             sensorEventsRecyclerView.setVisibility(View.VISIBLE);
             sensorEventRecyclerViewAdapter.addSensorEvent(sensorEvent);
+            showSensorEventNotification(sensorEvent);
         });
     }
 
     @Override
     public void populateRoomsSpinner(List<Room> rooms) {
+        roomNumberSpinnerAdapter.clear();
         if (rooms.isEmpty()) {
             instructionsTextView.setText("This Device ID does not have any rooms.");
             selectRoomNumberLinearLayout.setVisibility(View.INVISIBLE);
@@ -144,6 +158,39 @@ public class MainActivity extends AppCompatActivity implements MainView {
         sensorEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         sensorEventRecyclerViewAdapter = new SensorEventRecyclerViewAdapter();
         sensorEventsRecyclerView.setAdapter(sensorEventRecyclerViewAdapter);
+    }
+
+    //only necessary to specify a notification channel on Android 8 and above.
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String name = "sensor-client-channel";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void showSensorEventNotification(SensorEvent sensorEvent) {
+        //Create an intent to re-open the activity when the notification is clicked
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+
+        int icon = sensorEvent.isSuccessful() ? R.drawable.success_button : R.drawable.error_button;
+        String title = "Sensor event on room " + sensorEvent.getRoomNumber();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(icon)
+                .setContentTitle(title)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(sensorEvent.getMessage()))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(new Random().nextInt(), builder.build());
+
     }
 
     private String getDeviceId() {
