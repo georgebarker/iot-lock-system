@@ -101,7 +101,7 @@ public class SensorEventServiceImpl implements SensorEventService {
 	return null;
     }
 
-    private SensorEvent recordSensorEvent(final ClientSensorEvent clientSensorEvent, final Integer roomNumber,
+    private SensorEvent recordSensorEvent(final ClientSensorEvent clientSensorEvent, final String roomNumber,
 	    final Integer lockSerialNumber, final boolean isSuccessful, final String message) {
 	final SensorEvent sensorEvent = new SensorEvent(clientSensorEvent.getTagId(), roomNumber, lockSerialNumber,
 		isSuccessful, message);
@@ -109,10 +109,11 @@ public class SensorEventServiceImpl implements SensorEventService {
     }
 
     private boolean clientEventSpecifiesRoomNumber(final ClientSensorEvent clientSensorEvent) {
-	return clientSensorEvent.getRoomNumber() != 0;
+	final String roomNumber = clientSensorEvent.getRoomNumber();
+	return roomNumber != null && !roomNumber.isEmpty() && !roomNumber.equals("0");
     }
 
-    private Room findRoomByRoomNumber(final int roomNumber) {
+    private Room findRoomByRoomNumber(final String roomNumber) {
 	final Optional<Room> optionalRoom = roomRepository.findById(roomNumber);
 	return optionalRoom.isPresent() ? optionalRoom.get() : null;
     }

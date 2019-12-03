@@ -50,7 +50,7 @@ public class MainPresenterImpl implements MainPresenter, SensorEventSubscriber {
     }
 
     @Override
-    public void onUnlockButtonClicked(String deviceId, int roomNumber) {
+    public void onUnlockButtonClicked(String deviceId, String roomNumber) {
         if (!isDeviceIdValid(deviceId)) {
             mainView.onError("Device ID cannot be empty!");
             return;

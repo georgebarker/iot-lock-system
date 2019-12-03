@@ -13,7 +13,7 @@ public class SensorEvent {
 
     private int SensorEventId;
     private String tagId;
-    private Integer roomNumber;
+    private String roomNumber;
     private Integer lockSerialNumber;
     private Timestamp timestamp;
     private boolean successful;
@@ -23,7 +23,7 @@ public class SensorEvent {
 	// Default constructor
     }
 
-    public SensorEvent(final String tagId, final Integer roomNumber, final Integer lockSerialNumber,
+    public SensorEvent(final String tagId, final String roomNumber, final Integer lockSerialNumber,
 	    final boolean successful, final String message) {
 	this.tagId = tagId;
 	this.roomNumber = roomNumber;
@@ -53,11 +53,11 @@ public class SensorEvent {
     }
 
     @Column(name = "room_number")
-    public Integer getRoomNumber() {
+    public String getRoomNumber() {
 	return roomNumber;
     }
 
-    public void setRoomNumber(final Integer roomNumber) {
+    public void setRoomNumber(final String roomNumber) {
 	this.roomNumber = roomNumber;
     }
 

@@ -5,7 +5,7 @@ public class ClientSensorEvent {
     private long timestampMillis;
     private int sensorSerialNumber;
     private String tagId;
-    private int roomNumber;
+    private String roomNumber;
 
     @Override
     public String toString() {
@@ -37,11 +37,11 @@ public class ClientSensorEvent {
 	this.tagId = tagId;
     }
 
-    public int getRoomNumber() {
+    public String getRoomNumber() {
 	return roomNumber;
     }
 
-    public void setRoomNumber(final int roomNumber) {
+    public void setRoomNumber(final String roomNumber) {
 	this.roomNumber = roomNumber;
     }
 

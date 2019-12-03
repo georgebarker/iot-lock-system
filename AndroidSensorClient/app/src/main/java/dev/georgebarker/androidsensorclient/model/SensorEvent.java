@@ -6,16 +6,16 @@ public class SensorEvent {
 
     private int SensorEventId;
     private String tagId;
-    private int roomNumber;
+    private String roomNumber;
     private Timestamp timestamp;
     private boolean successful;
     private String message;
 
-    public int getRoomNumber() {
+    public String getRoomNumber() {
         return roomNumber;
     }
 
-    public void setRoomNumber(int roomNumber) {
+    public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
 

@@ -4,12 +4,12 @@ import java.util.Date;
 
 public class UnlockEvent {
     private long timestampMillis;
-    private int roomNumber;
+    private String roomNumber;
     private String tagId;
 
-    public UnlockEvent(String deviceId, int sensorId) {
+    public UnlockEvent(String deviceId, String roomNumber) {
 	this.timestampMillis = new Date().getTime();
-	this.roomNumber = sensorId;
+	this.roomNumber = roomNumber;
 	this.tagId = deviceId;
     }
 
@@ -27,11 +27,11 @@ public class UnlockEvent {
 	this.timestampMillis = timestampMillis;
     }
 
-    public int getRoomNumber() {
+    public String getRoomNumber() {
 	return roomNumber;
     }
 
-    public void setRoomNumber(final int roomNumber) {
+    public void setRoomNumber(final String roomNumber) {
 	this.roomNumber = roomNumber;
     }
 

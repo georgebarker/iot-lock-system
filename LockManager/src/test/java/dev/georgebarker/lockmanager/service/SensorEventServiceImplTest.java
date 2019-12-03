@@ -99,7 +99,7 @@ public class SensorEventServiceImplTest {
     }
 
     private TagRoomCombination createTagRoomCombination(final String tagId) {
-	final Room room = new Room(205, 123, 456);
+	final Room room = new Room("E205", 123, 456);
 	final TagRoomCombinationId id = new TagRoomCombinationId(tagId, room);
 	final TagRoomCombination tagSensorCombination = new TagRoomCombination();
 	tagSensorCombination.setTagRoomCombinationId(id);

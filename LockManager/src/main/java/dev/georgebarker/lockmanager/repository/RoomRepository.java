@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import dev.georgebarker.lockmanager.model.Room;
 
 @Repository
-public interface RoomRepository extends JpaRepository<Room, Integer> {
+public interface RoomRepository extends JpaRepository<Room, String> {
     Room findBySensorSerialNumber(int sensorSerialNumber);
 }

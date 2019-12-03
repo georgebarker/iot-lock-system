@@ -66,11 +66,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
     LinearLayout selectRoomNumberLinearLayout;
 
     private SensorEventRecyclerViewAdapter sensorEventRecyclerViewAdapter;
-    ArrayAdapter<Integer> roomNumberSpinnerAdapter;
+    ArrayAdapter<String> roomNumberSpinnerAdapter;
 
     private MainPresenter mainPresenter;
 
-    private Integer selectedRoomNumber;
+    private String selectedRoomNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void addSensorEvent(SensorEvent sensorEvent) {
-        int roomNumber = sensorEvent.getRoomNumber();
-        if (roomNumber != selectedRoomNumber) {
+        String roomNumber = sensorEvent.getRoomNumber();
+        if (!roomNumber.equals(selectedRoomNumber)) {
             Log.w(TAG, "Won't add Sensor Event, user has room " + selectedRoomNumber + "selected, but this event is for room: " + roomNumber);
             return;
         }

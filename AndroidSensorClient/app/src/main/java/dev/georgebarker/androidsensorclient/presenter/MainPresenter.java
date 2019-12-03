@@ -4,7 +4,7 @@ public interface MainPresenter {
 
     void onViewPrepared();
 
-    void onUnlockButtonClicked(String deviceId, int roomNumber);
+    void onUnlockButtonClicked(String deviceId, String roomNumber);
 
     void onDeviceIdConfirmButtonClicked(String deviceId);
 }

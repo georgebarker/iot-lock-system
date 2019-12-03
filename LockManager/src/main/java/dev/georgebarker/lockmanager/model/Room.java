@@ -9,7 +9,7 @@ import javax.persistence.Table;
 @Table(name = "room")
 public class Room {
 
-    private int roomNumber;
+    private String roomNumber;
     private int sensorSerialNumber;
     private int lockSerialNumber;
 
@@ -17,7 +17,7 @@ public class Room {
 	// Default constructor
     }
 
-    public Room(final int roomNumber, final int sensorSerialNumber, final int lockSerialNumber) {
+    public Room(final String roomNumber, final int sensorSerialNumber, final int lockSerialNumber) {
 	this.roomNumber = roomNumber;
 	this.sensorSerialNumber = sensorSerialNumber;
 	this.lockSerialNumber = lockSerialNumber;
@@ -25,11 +25,11 @@ public class Room {
 
     @Id
     @Column(name = "room_number")
-    public int getRoomNumber() {
+    public String getRoomNumber() {
 	return roomNumber;
     }
 
-    public void setRoomNumber(final int roomNumber) {
+    public void setRoomNumber(final String roomNumber) {
 	this.roomNumber = roomNumber;
     }
 
